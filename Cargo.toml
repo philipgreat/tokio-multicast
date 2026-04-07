@@ -1,11 +1,13 @@
 [package]
 name = "tokio-multicast"
-version = "0.1.0"
+version = "0.6.0"
 edition = "2021"
 rust-version = "1.75"
 license = "MIT"
 readme = "README.md"
 documentation = "https://docs.rs/tokio-multicast"
+repository = "https://github.com/philipgreat/tokio-multicast"
+homepage = "https://github.com/philipgreat/tokio-multicast"
 description = "Small Tokio helpers for UDP multicast send/receive."
 keywords = ["tokio", "multicast", "udp", "network", "async"]
 categories = ["asynchronous", "network-programming"]
