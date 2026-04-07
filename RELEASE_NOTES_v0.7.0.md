@@ -1,4 +1,4 @@
-# tokio-multicast v0.6.0
+# tokio-multicast v0.7.0
 
 Initial public release of `tokio-multicast`.
 
@@ -10,6 +10,7 @@ Initial public release of `tokio-multicast`.
 - Dynamic join/leave tracking for memberships
 - Basic packet metadata through `recv_datagram()`
 - Built-in multicast environment diagnostics for developers
+- Configurable diagnostics API with protocol filtering and JSON-friendly output
 - Example programs for send, receive, combined send/receive, diagnostics, multi-group, and SSM placeholder behavior
 
 ## Diagnostics
@@ -32,11 +33,13 @@ There is also a runnable example:
 ```bash
 cargo run --example diagnostics
 cargo run --example diagnostics -- --json
+cargo run --example diagnostics -- --ipv4-only
+cargo run --example diagnostics -- --ipv6-only
 ```
 
 ## Release checks
 
-The following checks were run for `v0.6.0`:
+The following checks were run for `v0.7.0`:
 
 - `cargo test`
 - `cargo package --allow-dirty`
