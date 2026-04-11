@@ -4,10 +4,11 @@ use socket2::Socket;
 
 use crate::{raw, Interface, Membership, MulticastError, Result};
 
-pub(crate) fn set_reuse_port(_: &Socket, enabled: bool) -> Result<()> {
-    if enabled {
-        return Err(MulticastError::UnsupportedOption("reuse_port"));
-    }
+pub(crate) fn set_reuse_port(socket: &Socket, enabled: bool) -> Result<()> {
+    // Winsock does not expose SO_REUSEPORT. For UDP multicast, SO_REUSEADDR is the
+    // socket option that allows multiple sockets to bind the same local port and
+    // each receive multicast traffic for the joined group.
+    socket.set_reuse_address(enabled)?;
     Ok(())
 }
 

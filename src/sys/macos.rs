@@ -1,13 +1,23 @@
 use std::net::IpAddr;
+use std::os::fd::AsRawFd;
 
 use socket2::Socket;
 
 use crate::{raw, Interface, Membership, MulticastError, Result};
 
 pub(crate) fn set_reuse_port(socket: &Socket, enabled: bool) -> Result<()> {
-    let _ = socket;
-    if enabled {
-        return Err(MulticastError::UnsupportedOption("reuse_port"));
+    let value: libc::c_int = enabled.into();
+    let result = unsafe {
+        libc::setsockopt(
+            socket.as_raw_fd(),
+            libc::SOL_SOCKET,
+            libc::SO_REUSEPORT,
+            (&value as *const libc::c_int).cast(),
+            std::mem::size_of_val(&value) as libc::socklen_t,
+        )
+    };
+    if result == -1 {
+        return Err(std::io::Error::last_os_error().into());
     }
     Ok(())
 }

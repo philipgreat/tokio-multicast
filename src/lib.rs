@@ -27,6 +27,7 @@ pub use stream::MulticastReceiver;
 mod tests {
     use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr, UdpSocket as StdUdpSocket};
 
+    use socket2::{Domain, Protocol, Socket, Type};
     use tokio::time::{timeout, Duration};
 
     use crate::{
@@ -68,6 +69,15 @@ mod tests {
     #[cfg(not(any(target_os = "linux", target_os = "macos", target_os = "windows")))]
     fn loopback_ifindex_v6() -> Option<u32> {
         crate::sys::loopback_interface_v6()
+    }
+
+    #[cfg(any(target_os = "linux", target_os = "macos", target_os = "windows"))]
+    #[test]
+    fn reuse_port_socket_option_smoke_test() {
+        let socket = Socket::new(Domain::IPV4, Type::DGRAM, Some(Protocol::UDP)).unwrap();
+
+        crate::sys::set_reuse_port(&socket, true).unwrap();
+        crate::sys::set_reuse_port(&socket, false).unwrap();
     }
 
     #[tokio::test(flavor = "current_thread")]
